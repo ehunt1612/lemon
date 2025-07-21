@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <title>Lemonade empire</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #f8f0c6;
+      color: #333;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+    .money {
+      font-size: 2em;
+      margin: 20px 0;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 1em;
+      cursor: pointer;
+      background: #f5d742;
+      border: 2px solid #c49812;
+      border-radius: 8px;
+      transition: 0.2s;
+    }
+    button:hover {
+      background: #ffe599;
+    }
+    .upgrade {
+      margin: 20px 0;
+    }
+    .log {
+      margin-top: 30px;
+      background: #fff8d4;
+      padding: 10px;
+      border-radius: 8px;
+      height: 100px;
+      overflow-y: auto;
+      font-size: 0.9em;
+      text-align: left;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+	function claimDailyReward() {
+  const reward = Math.floor(Math.random() * (10000 - 10 + 1)) + 10;
+  money += reward;
+  localStorage.setItem("lastDailyReward", new Date().toDateString());
+  document.getElementById("dailyRewardBtn").style.display = "none";
+  log(`You claimed your daily reward: $${reward.toLocaleString()}`);
+  updateDisplay();
+}
+
+function checkDailyReward() {
+  const lastClaim = localStorage.getItem("lastDailyReward");
+  const today = new Date().toDateString();
+  if (lastClaim !== today) {
+    document.getElementById("dailyRewardBtn").style.display = "inline-block";
+  }
+}
+.upgrade button {
+  background:  #f5d742;
+  border: 2px solid #c49812;
+  color: black;
+}
+
+.upgrade button:hover {
+  background:  #f5d742;
+}
+
+  </style>
+</head>
+<body>
+  <h1>🍋 Lemonade empire</h1>
+  <div class="money">Money: $<span id="money">0</span></div>
+
+  <button onclick="sellLemonade()">Sell Lemonade (<span id="lemonPriceDisplay">$1.00</span>)</button>
+
+  <div class="upgrade">
+    <h2>Upgrades</h2>
+    <button onclick="buyStand()">Buy Stand ($<span id="standCost">10</span>)</button><br />
+    <button onclick="buyAdvertising()">Buy Advertising ($<span id="adCost">50</span>)</button><br /><br />
+
+    <div>
+      <button onclick="upgradeEfficiency()">Upgrade Lemonade Price($100)</button>
+    </div><br />
+
+    <div>
+      <button onclick="upgradePrice()">Upgrade Efficiency stand ($150)</button>
+    </div>
+
+  </div>
+
+
+    <h2>Stats</h2>
+	
+    <p>Stands: <span id="stands">0</span></p>
+	
+    <p>Advertising Level: <span id="ads">0</span></p>
+	
+	<p><strong>Lemon Price</strong><br />
+      Level: <span id="priceLevel">0</span><br />
+      Current Price: $<span id="lemonPrice">1.00</span></p>
+	  
+	<p><strong>stand Efficiency</strong><br />
+      Level: <span id="efficiencyLevel">0</span><br />
+      Multiplier: x<span id="efficiencyMultiplier">1.00</span></p>
+	  
+    <p>Income/sec: $<span id="income">0</span></p>
+	
+  </div>
+
+  <div class="log" id="log"></div>
+
+  <script>
+    // Game state variables
+    let money = 0;
+    let stands = 0;
+    let advertising = 0;
+    let standCost = 10;
+    let adCost = 50;
+
+    // Efficiency upgrade vars
+    let efficiencyLevel = 0;
+    let efficiencyMultiplier = 1;
+
+    // Lemon price upgrade vars
+    let priceLevel = 0;
+    let lemonPrice = 1; // base price $1
+
+    function updateDisplay() {
+      document.getElementById('money').textContent = money.toFixed(2);
+      document.getElementById('stands').textContent = stands;
+      document.getElementById('ads').textContent = advertising;
+      document.getElementById('standCost').textContent = standCost;
+      document.getElementById('adCost').textContent = adCost;
+      document.getElementById('income').textContent = getIncomePerSecond().toFixed(2);
+
+      document.getElementById('efficiencyLevel').textContent = efficiencyLevel;
+      document.getElementById('efficiencyMultiplier').textContent = efficiencyMultiplier.toFixed(2);
+
+      document.getElementById('priceLevel').textContent = priceLevel;
+      document.getElementById('lemonPrice').textContent = lemonPrice.toFixed(2);
+
+      // Update sell button price display
+      document.getElementById('lemonPriceDisplay').textContent = `$${(lemonPrice * efficiencyMultiplier).toFixed(2)}`;
+    }
+
+    function getIncomePerSecond() {
+      return stands * (1 + advertising * 0.5);
+    }
+
+    function sellLemonade() {
+      // Money gained depends on lemon price and efficiency multiplier
+      const salePrice = lemonPrice * efficiencyMultiplier;
+      money += salePrice;
+      log(`You sold a lemonade for $${salePrice.toFixed(2)}!`);
+      updateDisplay();
+    }
+
+    function buyStand() {
+      if (money >= standCost) {
+        money -= standCost;
+        stands++;
+        standCost = Math.floor(standCost * 1.25);
+        log("Bought a new lemonade stand!");
+        updateDisplay();
+      } else {
+        log("Not enough money for a stand.");
+      }
+    }
+
+    function buyAdvertising() {
+      if (money >= adCost) {
+        money -= adCost;
+        advertising++;
+        adCost = Math.floor(adCost * 1.5);
+        log("You bought some advertising!");
+        updateDisplay();
+      } else {
+        log("Can't afford advertising.");
+      }
+    }
+
+    function upgradeEfficiency() {
+      if (money >= 100) {
+        money -= 100;
+        efficiencyLevel++;
+        efficiencyMultiplier = 1 + efficiencyLevel * 0.25;
+        log("Upgraded efficiency!");
+        updateDisplay();
+      } else {
+        log("Not enough money for Efficiency upgrade!");
+      }
+    }
+
+    function upgradePrice() {
+      if (money >= 150) {
+        money -= 150;
+        priceLevel++;
+        LemonPrice = 1 + priceLevel * 0.25;
+        log("Upgraded lemonade price!");
+        updateDisplay();
+      } else {
+        log("Not enough money for Price upgrade!");
+      }
+    }
+
+    function log(message) {
+      const logBox = document.getElementById('log');
+      logBox.innerHTML += `<div>> ${message}</div>`;
+      logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    // Passive income loop
+    setInterval(() => {
+      money += getIncomePerSecond();
+      updateDisplay();
+    }, 1000);
+
+    // Auto save every 3 seconds
+    setInterval(() => {
+      const save = {
+        money,
+        stands,
+        advertising,
+        standCost,
+        adCost,
+        efficiencyLevel,
+        priceLevel
+      };
+      localStorage.setItem("lemonadeSave", JSON.stringify(save));
+    }, 3000);
+
+
+  window.onload = () => {
+    // Check if this is the first visit
+    if (!localStorage.getItem('visitedBefore')) {
+      money += 100;               // Give $100
+      localStorage.setItem('visitedBefore', 'true');  // Mark that user visited
+      log("Welcome! You received a $100 bonus for your first visit.");
+    }
+
+    // Your existing load game code here...
+    const save = JSON.parse(localStorage.getItem("lemonadeSave"));
+    if (save) {
+      money = save.money || money;
+      // load other saved data as before
+      log("Game loaded.");
+    } else if (!localStorage.getItem('visitedBefore')) {
+      // (If you want, you can handle new users here too, but above handles it)
+    }
+    
+    updateDisplay();
+  };
+
+
+    // Load save on page load
+    window.onload = () => {
+      const save = JSON.parse(localStorage.getItem("lemonadeSave"));
+      if (save) {
+        money = save.money || 0;
+        stands = save.stands || 0;
+        advertising = save.advertising || 0;
+        standCost = save.standCost || 10;
+        adCost = save.adCost || 50;
+        efficiencyLevel = save.efficiencyLevel || 0;
+        efficiencyMultiplier = 1 + efficiencyLevel * 0.25;
+        priceLevel = save.priceLevel || 0;
+        lemonPrice = 1 + priceLevel * 0.25;
+        log("Game loaded.");
+      } else {
+        log("Welcome to Lemonade Stand Tycoon!");
+      }
+      updateDisplay();
+    };
+	function resetGame() {
+  localStorage.clear(); // deletes all saved data
+  location.reload();    // refreshes the game
+}
+  </script>
+    <div class="upgrade">
+  <div class="upgrade">
+  <button onclick="resetGame()">Reset Everything</button>
+</div>
+</body>
+</html>
