@@ -203,7 +203,7 @@ function checkDailyReward() {
       if (money >= 100) {
         money -= 100;
         efficiencyLevel++;
-       LemonPrice = 1 + priceLevel * 0.25;
+        efficiencyMultiplier = 1 + priceLevel * 0.25;
         log("Upgraded efficiency!");
         updateDisplay();
       } else {
@@ -215,7 +215,7 @@ function checkDailyReward() {
       if (money >= 150) {
         money -= 150;
         priceLevel++;
-         efficiencyMultiplier = 1 + efficiencyLevel * 0.25;
+        LemonPrice = 1 + efficiencyLevel * 0.25;
         log("Upgraded lemonade price!");
         updateDisplay();
       } else {
