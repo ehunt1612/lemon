@@ -3,110 +3,200 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
   <title>When life gives you🍋🍋🍋</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
+    :root{
+      --bg:#0e0f1a;
+      --panel:#1a1b2b;
+      --panel-light:#2a2b46;
+      --lemon:#f5d742;
+      --lemon-dark:#c49812;
+      --text:#fff9d6;
+      --accent:#fcee6e;
+      --danger:#ff6b6b;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
     body {
-      font-family: 'Arial', sans-serif;
-      background: #f8f0c6;
-      color: #333;
+      margin: 0;
+      font-family: 'Press Start 2P', monospace;
+      background:
+        radial-gradient(1200px 800px at 50% -20%, #333 0%, #1a1a2a 60%, #0a0b18 100%),
+        var(--bg);
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      padding: 28px 12px 60px;
+    }
+
+    body::before{
+      content:"";
+      position: fixed; inset:0;
+      pointer-events:none;
+      background:
+        repeating-linear-gradient(to bottom, rgba(255,255,150,0.05) 0 1px, transparent 1px 3px);
+      mix-blend-mode: overlay;
+      animation: hum 6s steps(2,end) infinite;
+    }
+    @keyframes hum { 0%,100%{opacity:.2} 50%{opacity:.35} }
+
+    .frame{
+      width: min(780px, 94vw);
+      background: var(--panel);
+      padding: 18px;
+      border: 4px solid var(--lemon);
+      box-shadow: 0 0 10px var(--lemon), 0 0 0 4px #000;
+      animation: fadeIn 1s ease-out;
       text-align: center;
-      padding: 20px;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
     }
 
     h1 {
-      font-size: 2.5em;
-      margin-bottom: 10px;
+      font-size: clamp(18px, 4.2vw, 28px);
+      margin: 0 0 18px;
+      text-shadow: 0 0 12px rgba(255,255,150,.6), 2px 2px 0 #000;
+      color: var(--lemon);
+      animation: flicker 3s infinite;
+    }
+    @keyframes flicker {
+      0%,19%,21%,23%,25%,54%,56%,100% { opacity: 1; }
+      20%,22%,24%,55% { opacity: 0.7; }
     }
 
     .money {
-      font-size: 2em;
-      margin: 20px 0;
+      font-size: clamp(14px, 3.4vw, 22px);
+      margin: 14px 0 18px;
+      color: var(--lemon);
+      text-shadow: 2px 2px 0 #000, 0 0 6px var(--lemon);
+      transition: transform 0.2s ease;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
+    .money.pop { transform: scale(1.2); }
 
     button {
-      padding: 10px 20px;
-      margin: 10px;
-      font-size: 1em;
+      font-family: 'Press Start 2P', monospace;
+      padding: 12px 16px;
+      margin: 8px;
+      font-size: 12px;
       cursor: pointer;
-      background: #f5d742;
-      border: 2px solid #c49812;
-      border-radius: 8px;
-      transition: 0.2s;
+      background: var(--lemon);
+      color: #1a1a1a;
+      border: 4px solid #000;
+      box-shadow: inset -6px -6px 0 var(--lemon-dark), inset 6px 6px 0 #fff9c6, 0 4px 0 #000;
+      transition: transform .1s;
+    }
+    button:hover { animation: wiggle 0.3s ease-in-out; }
+    @keyframes wiggle {
+      0%,100% { transform: rotate(0deg); }
+      25% { transform: rotate(2deg); }
+      75% { transform: rotate(-2deg); }
     }
 
-    button:hover {
-      background: #ffe599;
+    .sell-btn{
+      background: #ffef6e;
+      border-color: var(--lemon-dark);
+      animation: pulse 1.4s infinite alternate;
+    }
+    @keyframes pulse {
+      from { transform: scale(1); filter: brightness(1); }
+      to { transform: scale(1.08); filter: brightness(1.3); }
     }
 
-    .upgrade {
-      margin: 20px 0;
+    .upgrade, .stats, .log {
+      background: var(--panel-light);
+      border: 4px solid var(--lemon);
+      padding: 12px;
+      margin: 16px auto;
+      box-shadow: 0 4px 0 #000, inset 0 0 10px rgba(255,230,100,0.4);
+      max-width: 560px;
+    }
+
+    h2 {
+      color: var(--lemon);
+      text-shadow: 0 0 6px var(--lemon-dark);
     }
 
     .log {
-      margin-top: 30px;
-      background: #fff8d4;
-      padding: 10px;
-      border-radius: 8px;
-      height: 100px;
+      height: 120px;
       overflow-y: auto;
-      font-size: 0.9em;
-      text-align: left;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
+      font-size: 11px;
+      color: #ffe97a;
+      background: #0a0d12;
+      border-color: #f5d742;
+    }
+    .log div {
+      padding: 2px 0;
+      animation: slideIn 0.3s ease-out;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-10px); }
+      to { opacity: 1; transform: translateX(0); }
     }
 
-    .top-left {
-      position: absolute;
-      top: 10px;
-      left: 10px;
+    .bottom-reset {
+      margin-top: 18px;
+    }
+    .bottom-reset button {
+      background: var(--danger);
+      color: #fff;
+      animation: slowPulse 2s infinite alternate;
+    }
+    @keyframes slowPulse {
+      from { transform: scale(1); }
+      to { transform: scale(1.05); }
     }
   </style>
 </head>
 <body>
+  <div class="frame">
+    <h1>Lemonade Empire</h1>
+    <div class="money" id="moneyBox">Money: $<span id="money">0</span></div>
 
-  <div class="top-left">
-    <button onclick="resetGame()">Reset Everything</button>
+    <div class="row">
+      <button class="sell-btn" onclick="sellLemonade()">Sell Lemonade (<span id="lemonPriceDisplay">$1.00</span>)</button>
+    </div>
+
+    <div class="upgrade">
+      <h2>Upgrades</h2>
+      <div class="row">
+        <button onclick="buyStand()">Buy Stand ($<span id="standCost">10</span>)</button>
+        <button onclick="buyAdvertising()">Buy Advertising ($<span id="adCost">50</span>)</button>
+        <button onclick="upgradePrice()">Upgrade Lemonade Price ($100)</button>
+        <button onclick="upgradeEfficiency()">Upgrade Efficiency Stand ($150)</button>
+      </div>
+    </div>
+
+    <div class="stats">
+      <h2>Stats</h2>
+      <p>Stands: <span id="stands">0</span></p>
+      <p>Advertising Level: <span id="ads">0</span></p>
+      <p><strong>Lemon Price</strong><br>
+        Level: <span id="priceLevel">0</span><br>
+        Current Price: $<span id="lemonPrice">1.00</span></p>
+      <p><strong>Stand Efficiency</strong><br>
+        Level: <span id="efficiencyLevel">0</span><br>
+        Multiplier: x<span id="efficiencyMultiplier">1.00</span></p>
+      <p>Income/sec: $<span id="income">0</span></p>
+    </div>
+
+    <div class="log" id="log"></div>
+
+    <div class="bottom-reset">
+      <button onclick="resetGame()">Reset</button>
+    </div>
   </div>
-
-  <h1>🍋 Lemonade Empire</h1>
-  <div class="money">Money: $<span id="money">0</span></div>
-
-  <button onclick="sellLemonade()">Sell Lemonade (<span id="lemonPriceDisplay">$1.00</span>)</button>
-
-  <div class="upgrade">
-    <h2>Upgrades</h2>
-    <button onclick="buyStand()">Buy Stand ($<span id="standCost">10</span>)</button><br />
-    <button onclick="buyAdvertising()">Buy Advertising ($<span id="adCost">50</span>)</button><br /><br />
-    <button onclick="upgradePrice()">Upgrade Lemonade Price ($100)</button><br /><br />
-    <button onclick="upgradeEfficiency()">Upgrade Efficiency Stand ($150)</button>
-  </div>
-
-  <h2>Stats</h2>
-  <p>Stands: <span id="stands">0</span></p>
-  <p>Advertising Level: <span id="ads">0</span></p>
-  <p><strong>Lemon Price</strong><br />
-    Level: <span id="priceLevel">0</span><br />
-    Current Price: $<span id="lemonPrice">1.00</span></p>
-  <p><strong>Stand Efficiency</strong><br />
-    Level: <span id="efficiencyLevel">0</span><br />
-    Multiplier: x<span id="efficiencyMultiplier">1.00</span></p>
-  <p>Income/sec: $<span id="income">0</span></p>
-
-  <div class="log" id="log"></div>
 
   <script>
-    // Game variables
-    let money = 0;
-    let stands = 0;
-    let advertising = 0;
-    let standCost = 10;
-    let adCost = 50;
-
-    let efficiencyLevel = 0;
-    let efficiencyMultiplier = 1;
-
-    let priceLevel = 0;
-    let lemonPrice = 1;
+    let money = 0, stands = 0, advertising = 0, standCost = 10, adCost = 50;
+    let efficiencyLevel = 0, efficiencyMultiplier = 1;
+    let priceLevel = 0, lemonPrice = 1;
 
     function updateDisplay() {
       document.getElementById('money').textContent = money.toFixed(2);
@@ -115,14 +205,15 @@
       document.getElementById('standCost').textContent = standCost;
       document.getElementById('adCost').textContent = adCost;
       document.getElementById('income').textContent = getIncomePerSecond().toFixed(2);
-
       document.getElementById('efficiencyLevel').textContent = efficiencyLevel;
       document.getElementById('efficiencyMultiplier').textContent = efficiencyMultiplier.toFixed(2);
-
       document.getElementById('priceLevel').textContent = priceLevel;
       document.getElementById('lemonPrice').textContent = lemonPrice.toFixed(2);
-
       document.getElementById('lemonPriceDisplay').textContent = `$${(lemonPrice * efficiencyMultiplier).toFixed(2)}`;
+
+      let moneyBox = document.getElementById('moneyBox');
+      moneyBox.classList.add('pop');
+      setTimeout(() => moneyBox.classList.remove('pop'), 200);
     }
 
     function getIncomePerSecond() {
@@ -143,9 +234,7 @@
         standCost = Math.floor(standCost * 1.25);
         log("Bought a new lemonade stand!");
         updateDisplay();
-      } else {
-        log("Not enough money for a stand.");
-      }
+      } else log("Not enough money for a stand.");
     }
 
     function buyAdvertising() {
@@ -155,9 +244,7 @@
         adCost = Math.floor(adCost * 1.5);
         log("You bought some advertising!");
         updateDisplay();
-      } else {
-        log("Can't afford advertising.");
-      }
+      } else log("Can't afford advertising.");
     }
 
     function upgradePrice() {
@@ -167,9 +254,7 @@
         lemonPrice = 1 + priceLevel * 1.00;
         log("Upgraded lemonade price!");
         updateDisplay();
-      } else {
-        log("Not enough money for Lemonade Price upgrade!");
-      }
+      } else log("Not enough money for Lemonade Price upgrade!");
     }
 
     function upgradeEfficiency() {
@@ -179,14 +264,13 @@
         efficiencyMultiplier = 1 + efficiencyLevel * 0.25;
         log("Upgraded efficiency!");
         updateDisplay();
-      } else {
-        log("Not enough money for Efficiency upgrade!");
-      }
+      } else log("Not enough money for Efficiency upgrade!");
     }
 
     function log(message) {
       const logBox = document.getElementById('log');
-      logBox.innerHTML += `<div>> ${message}</div>`;
+      const time = new Date().toLocaleTimeString();
+      logBox.innerHTML += `<div>&gt; [${time}] ${message}</div>`;
       logBox.scrollTop = logBox.scrollHeight;
     }
 
@@ -195,23 +279,10 @@
       location.reload();
     }
 
-    // Passive income
-    setInterval(() => {
-      money += getIncomePerSecond();
-      updateDisplay();
-    }, 1000);
+    setInterval(() => { money += getIncomePerSecond(); updateDisplay(); }, 1000);
 
-    // Auto save
     setInterval(() => {
-      const save = {
-        money,
-        stands,
-        advertising,
-        standCost,
-        adCost,
-        efficiencyLevel,
-        priceLevel
-      };
+      const save = { money, stands, advertising, standCost, adCost, efficiencyLevel, priceLevel };
       localStorage.setItem("lemonadeSave", JSON.stringify(save));
     }, 3000);
 
@@ -221,26 +292,17 @@
         localStorage.setItem('visitedBefore', 'true');
         log("Welcome! You received a $100 bonus for your first visit.");
       }
-
       const save = JSON.parse(localStorage.getItem("lemonadeSave"));
       if (save) {
-        money = save.money || 0;
-        stands = save.stands || 0;
-        advertising = save.advertising || 0;
-        standCost = save.standCost || 10;
-        adCost = save.adCost || 50;
-        efficiencyLevel = save.efficiencyLevel || 0;
+        money = save.money ?? 0; stands = save.stands ?? 0; advertising = save.advertising ?? 0;
+        standCost = save.standCost ?? 10; adCost = save.adCost ?? 50;
+        efficiencyLevel = save.efficiencyLevel ?? 0;
         efficiencyMultiplier = 1 + efficiencyLevel * 0.25;
-        priceLevel = save.priceLevel || 0;
-        lemonPrice = 1 + priceLevel * 0.25;
+        priceLevel = save.priceLevel ?? 0; lemonPrice = 1 + priceLevel * 1.00;
         log("Game loaded.");
-      } else {
-        log("Welcome to Lemonade Stand Tycoon!");
-      }
-
+      } else log("Welcome to Lemonade Stand Tycoon!");
       updateDisplay();
     };
   </script>
-
 </body>
 </html>
