@@ -9,10 +9,11 @@
       --bg:#000b1a; 
       --panel:#001133; 
       --panel-light:#002266; 
-      --lemon:#ffff66;
-      --lemon-dark:#c4c812;
+      --yellow:#ffff66;
+      --yellow-dark:#c4c812;
+      --blue:#00f0ff;
+      --blue-dark:#0088cc;
       --text:#fff9d6;
-      --accent:#ffff33; 
       --danger:#ff3b6b;
     }
 
@@ -26,6 +27,30 @@
       place-items: center;
       padding: 28px 12px 60px;
       position: relative;
+      image-rendering: pixelated;
+    }
+
+    body, canvas, .frame, button, h1, h2, .money, .stats, .upgrade, .log {
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+
+    /* CRT scanline overlay */
+    body::after {
+      content:"";
+      position:fixed;
+      inset:0;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.2) 0px,
+        rgba(0,0,0,0.2) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+      pointer-events:none;
+      z-index:9999;
+      mix-blend-mode: multiply;
+      opacity:0.4;
     }
 
     #particleCanvas {
@@ -44,7 +69,7 @@
       pointer-events:none;
       background:
         repeating-linear-gradient(to bottom, rgba(255,255,150,0.05) 0 2px, transparent 2px 4px),
-        repeating-linear-gradient(to right, rgba(255,255,150,0.02) 0 2px, transparent 2px 4px);
+        repeating-linear-gradient(to right, rgba(0,255,255,0.02) 0 2px, transparent 2px 4px);
       mix-blend-mode: overlay;
       animation: hum 6s steps(2,end) infinite;
     }
@@ -56,48 +81,49 @@
       width: min(780px, 94vw);
       background: var(--panel);
       padding: 18px;
-      border: 4px solid var(--accent);
-      box-shadow: 0 0 12px var(--accent), 0 0 0 4px #000, 0 0 24px var(--accent);
+      border: 4px solid var(--yellow);
+      box-shadow: 0 0 12px var(--yellow), 0 0 0 4px #000, 0 0 24px var(--blue);
       animation: fadeIn 1s ease-out, neonPulse 2s infinite alternate;
       text-align: center;
     }
     @keyframes fadeIn { from { opacity:0; transform:scale(0.95);} to {opacity:1; transform:scale(1);} }
-    @keyframes neonPulse { from { box-shadow:0 0 12px var(--accent),0 0 24px var(--accent);} to { box-shadow:0 0 24px var(--accent),0 0 48px var(--accent);} }
+    @keyframes neonPulse { from { box-shadow:0 0 12px var(--yellow),0 0 24px var(--blue);} to { box-shadow:0 0 24px var(--yellow),0 0 48px var(--blue);} }
 
     h1 {
       font-size: clamp(18px, 4.2vw, 28px);
       margin: 0 0 18px;
-      text-shadow: 0 0 4px #fff,0 0 8px var(--accent),0 0 12px var(--accent),0 0 18px var(--lemon);
-      color: var(--accent);
+      text-shadow: 0 0 4px #fff,0 0 8px var(--yellow),0 0 12px var(--blue),0 0 18px var(--yellow);
+      color: var(--yellow);
       animation: flicker 6s infinite;
     }
-    @keyframes flicker { 0%,19%,21%,23%,25%,54%,56%,100%{opacity:1;text-shadow:0 0 4px #fff,0 0 8px var(--accent),0 0 12px var(--accent);} 20%,22%,24%,55%{opacity:0.7;text-shadow:0 0 2px #fff,0 0 4px var(--accent);} }
+    @keyframes flicker { 0%,19%,21%,23%,25%,54%,56%,100%{opacity:1;text-shadow:0 0 4px #fff,0 0 8px var(--yellow),0 0 12px var(--blue);} 20%,22%,24%,55%{opacity:0.7;text-shadow:0 0 2px #fff,0 0 4px var(--yellow),0 0 6px var(--blue);} }
 
-    .money { font-size: clamp(14px, 3.4vw, 22px); margin:14px 0 18px; color: var(--lemon); text-shadow:0 0 6px #fff,0 0 10px var(--lemon); display:flex; align-items:center; justify-content:center; }
+    .money { font-size: clamp(14px, 3.4vw, 22px); margin:14px 0 18px; color: var(--yellow); text-shadow:0 0 6px #fff,0 0 10px var(--yellow); display:flex; align-items:center; justify-content:center; }
 
     button {
       font-family:'Press Start 2P', monospace; padding:12px 16px; margin:8px; font-size:12px; cursor:pointer;
-      background: linear-gradient(145deg, var(--accent), var(--lemon)); color:#000; border:4px solid #000;
-      box-shadow: inset -4px -4px 0 #c4c812, inset 4px 4px 0 #fff,0 4px 0 #000;
+      background: linear-gradient(145deg, var(--yellow), var(--blue));
+      color:#000; border:4px solid #000;
+      box-shadow: inset -4px -4px 0 var(--yellow-dark), inset 4px 4px 0 #fff,0 4px 0 var(--blue-dark);
       transition: transform .1s, filter .2s;
       animation: flicker 6s infinite;
     }
     button:hover { animation: wiggle 0.3s ease-in-out,flicker 6s infinite; filter: brightness(1.2); }
     @keyframes wiggle { 0%,100%{transform:rotate(0deg);} 25%{transform:rotate(2deg);} 75%{transform:rotate(-2deg);} }
 
-    .sell-btn { background: linear-gradient(145deg, var(--lemon), #ffff99); border-color: var(--lemon-dark); animation: neonPulse 1.2s infinite alternate, flicker 6s infinite; }
+    .sell-btn { background: linear-gradient(145deg, var(--yellow), var(--blue)); border-color: var(--blue-dark); animation: neonPulse 1.2s infinite alternate, flicker 6s infinite; }
 
-    .upgrade, .stats, .log { background: var(--panel-light); border:4px solid var(--accent); padding:12px; margin:16px auto; box-shadow:0 4px 0 #000,inset 0 0 12px rgba(255,255,150,0.4); max-width:560px; animation:flicker 6s infinite; }
+    .upgrade, .stats, .log { background: var(--panel-light); border:4px solid var(--yellow); padding:12px; margin:16px auto; box-shadow:0 4px 0 #000,inset 0 0 12px rgba(255,255,0,0.4), inset 0 0 12px rgba(0,255,255,0.4); max-width:560px; animation:flicker 6s infinite; }
 
-    h2 { color: var(--accent); text-shadow:0 0 6px #fff,0 0 12px var(--accent); }
+    h2 { color: var(--yellow); text-shadow:0 0 6px #fff,0 0 12px var(--blue); }
 
-    .log { height:120px; overflow-y:auto; font-size:11px; color:#ffff66; background:#000822; border-color: var(--accent); }
+    .log { height:120px; overflow-y:auto; font-size:11px; color:var(--yellow); background:#000822; border-color: var(--yellow); }
     .log div { padding:2px 0; animation: slideIn 0.3s ease-out; }
     @keyframes slideIn { from{opacity:0;transform:translateX(-10px);} to{opacity:1;transform:translateX(0);} }
 
     .bottom-reset { margin-top:18px; }
-    .bottom-reset button { background:#ffcc66; color:#000; animation: slowPulse 2s infinite alternate, flicker 6s infinite; }
-    @keyframes slowPulse { from{transform:scale(1); box-shadow:0 0 6px #ffcc66,0 0 12px #ffff33;} to{transform:scale(1.05); box-shadow:0 0 12px #ffcc66,0 0 24px #ffff33;} }
+    .bottom-reset button { background: linear-gradient(var(--yellow), var(--blue)); color:#000; animation: slowPulse 2s infinite alternate, flicker 6s infinite; }
+    @keyframes slowPulse { from{transform:scale(1); box-shadow:0 0 6px var(--yellow),0 0 12px var(--blue);} to{transform:scale(1.05); box-shadow:0 0 12px var(--yellow),0 0 24px var(--blue);} }
   </style>
 </head>
 <body>
@@ -189,13 +215,14 @@
     function createParticles(count=150){
       particles=[];
       for(let i=0;i<count;i++){
+        const color = Math.random()<0.5 ? 'hsl(60,100%,50%)' : 'hsl(180,100%,50%)'; // yellow or blue
         particles.push({
           x: Math.random()*canvas.width,
           y: Math.random()*canvas.height,
           r: Math.random()*2+1,
           dx: (Math.random()-0.5)*0.5,
           dy: (Math.random()-0.5)*0.5,
-          color: `hsl(60,100%,50%)`,
+          color: color,
           alpha: Math.random()
         });
       }
@@ -210,7 +237,7 @@
         if(p.y<0)p.y=canvas.height; if(p.y>canvas.height)p.y=0;
         ctx.beginPath();
         ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-        ctx.fillStyle=`hsla(60,100%,50%,${p.alpha})`;
+        ctx.fillStyle=`hsla(${p.color.includes('60') ? 60 : 180},100%,50%,${p.alpha})`;
         ctx.shadowBlur=8;
         ctx.shadowColor=p.color;
         ctx.fill();
@@ -219,14 +246,12 @@
     }
     animateParticles();
 
-    // --- Neon canvas flicker with different intervals ---
     function flickerCanvas(interval, minOpacity=0.5, maxOpacity=1, duration=150) {
       setInterval(() => {
         canvas.style.opacity = minOpacity + Math.random()*(maxOpacity-minOpacity);
         setTimeout(() => { canvas.style.opacity = maxOpacity; }, duration);
       }, interval);
     }
-
     flickerCanvas(15000, 0.6, 1, 200);
     flickerCanvas(27000, 0.5, 0.9, 120);
     flickerCanvas(42000, 0.55, 1, 180);
